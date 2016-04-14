@@ -63,10 +63,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ara2\AraGrid\AraGrid.js" />
+    <Content Include="Ara2\AraGrid\files\grid_locale-pt-br.js" />
+    <Content Include="Ara2\AraGrid\files\jquery_jqGrid_min.js" />
+    <Content Include="Ara2\AraGrid\files\jquery_jqGrid_src.js" />
+    <Content Include="Ara2\AraGrid\files\ui_jqgrid.css" />
+    <Content Include="Ara2\AraGrid\files\ui_jqgrid_Ara2.css" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Ara2\AraGrid\files\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
