@@ -57,17 +57,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ara2\AraGrid\CREDITS.md" />
-    <None Include="Ara2\AraGrid\LICENSE.md" />
+    <None Include="Ara2\Components\AraGrid\CREDITS.md" />
+    <None Include="Ara2\Components\AraGrid\LICENSE.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ara2\AraGrid\AraGrid.js" />
-    <Content Include="Ara2\AraGrid\files\grid_locale-pt-br.js" />
-    <Content Include="Ara2\AraGrid\files\jquery_jqGrid_min.js" />
-    <Content Include="Ara2\AraGrid\files\jquery_jqGrid_src.js" />
-    <Content Include="Ara2\AraGrid\files\ui_jqgrid.css" />
-    <Content Include="Ara2\AraGrid\files\ui_jqgrid_Ara2.css" />
+    <Content Include="Ara2\Components\AraGrid\AraGrid.js" />
+    <Content Include="Ara2\Components\AraGrid\files\grid_locale-pt-br.js" />
+    <Content Include="Ara2\Components\AraGrid\files\jquery_jqGrid_min.js" />
+    <Content Include="Ara2\Components\AraGrid\files\jquery_jqGrid_src.js" />
+    <Content Include="Ara2\Components\AraGrid\files\ui_jqgrid.css" />
+    <Content Include="Ara2\Components\AraGrid\files\ui_jqgrid_Ara2.css" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
