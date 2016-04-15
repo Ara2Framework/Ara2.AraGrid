@@ -31,11 +31,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ara2, Version=1.2.5946.20635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Ara2.1.2.5946.20635\lib\net40\Ara2.dll</HintPath>
+      <HintPath>..\packages\Ara2.1.2.5946.20635\lib\net40\Ara2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,16 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AraComponentsServer\Components\AraGrid.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridButton.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridCell.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridCol.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridCols.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridEditrules.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridRow.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridRows.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridTree.cs" />
-    <Compile Include="AraComponentsServer\Components\AraGridTreeGroup.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGrid.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridButton.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridCell.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridCol.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridCols.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridControlPanel\AraGridControlPanel.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridControlPanel\AraGridControlPanelBrowserPages\AraGridBottomNav.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridEditrules.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridRow.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridRows.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridTree.cs" />
+    <Compile Include="Ara2ComponentsServer\Components\AraGridTreeGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +72,11 @@
     <Content Include="Ara2\Components\AraGrid\files\ui_jqgrid.css" />
     <Content Include="Ara2\Components\AraGrid\files\ui_jqgrid_Ara2.css" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Ara2ComponentsServer\Components\AraGridControlPanel\AraGridColsHidden\" />
+    <Folder Include="Ara2ComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmResultSum\" />
+    <Folder Include="Ara2ComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmSelection\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
