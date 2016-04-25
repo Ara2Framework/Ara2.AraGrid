@@ -59,8 +59,20 @@
       <HintPath>..\packages\Ara2.AraTable.1.0.0.0\lib\net40\Ara2.AraTable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ara2.AraTimer, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraTimer.1.0.0.1\lib\net40\Ara2.AraTimer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ara2.AraWindow, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Ara2.AraWindow.1.0.0.3\lib\net40\Ara2.AraWindow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Dynamic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=68293a411f0cabcc, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -74,10 +86,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AraComponentsServer\Components\AraGridControlPanelBrowserPages\AraGridBottomNav.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanel\AraGridColsHidden\AraGridColsHidden.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanel\AraGridControlPanel.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmResultSum\AraGridTreeGroupFrmResultSum.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmSelection\AraGridTreeGroupFrmSelection.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraFormSearchLinq\AraFormSearchLinq.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraFormSearchLinq\AraFormSearchLinqButton\AraFormSearchLinqButton.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridColGroup.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridColGroups.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinq.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.AraDesign.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.cs" />
     <Compile Include="AraComponentsServer\Components\AraGrid\AraGrid.cs" />
     <Compile Include="AraComponentsServer\Components\AraGrid\AraGridButton.cs" />
     <Compile Include="AraComponentsServer\Components\AraGrid\AraGridCell.cs" />
@@ -103,6 +123,7 @@
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmResultSum\AraGridTreeGroupFrmResultSum.htm" />
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmSelection\AraGridTreeGroupFrmSelection.htm" />
     <Content Include="Nuget\NuGet.exe" />
+    <None Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.AraDesign" />
     <None Include="Nuget\Ara2.AraGrid.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -14,6 +14,16 @@
         <language>pt-BR</language>
         <dependencies>
             <dependency id="Ara2" version="1.2.6" />
+            <dependency id="Ara2.AraButton" version="1.0.0.2"/>
+            <dependency id="Ara2.AraDiv" version="1.0.0.2"/>
+            <dependency id="Ara2.AraLabel" version="1.0.0.1"/>
+            <dependency id="Ara2.AraMenu" version="1.0.0.0"/>
+            <dependency id="Ara2.AraSelect" version="1.0.0.0"/>
+            <dependency id="Ara2.AraTable" version="1.0.0.0"/>
+            <dependency id="Ara2.AraTimer" version="1.0.0.1"/>
+            <dependency id="Ara2.AraWindow" version="1.0.0.3"/>
+            <dependency id="DynamicQuery" version="1.0"/>
+            <dependency id="EPPlus" version="4.0.4"/>
         </dependencies>
     </metadata>
     <files>
