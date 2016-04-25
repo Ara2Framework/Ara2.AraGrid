@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2016, Rafael Leonel Pontani. All rights reserved.
+﻿// Copyright (c) 2010-2016, Rafael Leonel Pontani. All rights reserved.
 // For licensing, see LICENSE.md or http://www.araframework.com.br/license
 // This file is part of AraFramework project details visit http://www.arafrework.com.br
 // AraFramework - Rafael Leonel Pontani, 2016-4-14
@@ -395,31 +395,31 @@ namespace Ara2.Components
 
         #region Eventos
         [AraDevEvent]
-        public AraComponentEventKey<EventHandler> Click { get; set; }
+        public AraComponentEventKey<EventHandler> Click;
 
         public delegate void Key_delegate(AraGrid Object, int vKey);
 
         [AraDevEvent]
-        public AraComponentEventKey<Key_delegate> KeyDown { get; set; }
+        public AraComponentEventKey<Key_delegate> KeyDown;
         [AraDevEvent]
-        public AraComponentEventKey<Key_delegate> KeyUp { get; set; }
+        public AraComponentEventKey<Key_delegate> KeyUp;
         [AraDevEvent]
-        public AraComponentEventKey<Key_delegate> KeyPress { get; set; }
+        public AraComponentEventKey<Key_delegate> KeyPress;
 
         public delegate void dClickCell(AraGridCol vCol, AraGridRow vRow, AraEventMouse vMouse);
 
         [AraDevEvent]
-        public AraComponentEventKey<dClickCell> ClickCell { get; set; }
+        public AraComponentEventKey<dClickCell> ClickCell;
         [AraDevEvent]
-        public AraComponentEventKey<dClickCell> ClickDblCell { get; set; }
+        public AraComponentEventKey<dClickCell> ClickDblCell;
 
         [AraDevEvent]
-        public AraComponentEventKey<EventHandler> SelectCell { get; set; }
+        public AraComponentEventKey<EventHandler> SelectCell;
 
         public delegate void SelectRow_delegate(AraGrid Object, AraGridRow Row);
 
         [AraDevEvent]
-        public AraComponentEventKey<SelectRow_delegate> SelectRow { get; set; }
+        public AraComponentEventKey<SelectRow_delegate> SelectRow;
 
         //public delegate void PageChange_delegate(AraGrid Object, int Page, int PageMaxRecords);
         //public AraComponentEventKey<PageChange_delegate> PageChange;
@@ -427,7 +427,7 @@ namespace Ara2.Components
         public delegate void ChangeCell_delegate(AraGrid Object, AraGridRow Row, AraGridCol Col, string Value);
 
         [AraDevEvent]
-        public AraComponentEventKey<ChangeCell_delegate> ChangeCell { get; set; }
+        public AraComponentEventKey<ChangeCell_delegate> ChangeCell;
         #endregion
 
         private bool _Visible = true;
