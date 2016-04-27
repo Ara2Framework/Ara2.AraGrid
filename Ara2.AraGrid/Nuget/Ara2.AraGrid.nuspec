@@ -24,7 +24,6 @@
             <dependency id="Ara2.AraWindow" version="1.0.0.3"/>
             <dependency id="DynamicQuery" version="1.0"/>
             <dependency id="EPPlus" version="4.0.4"/>
-            <dependency id="Ara2.AraForeignKey" version="1.0.0.0"/>
             <dependency id="Ara2.AraSplitContainers" version="1.0.0.0"/>          
             <dependency id="Ara2.AraTabs" version="1.0.0.0"/>
             <dependency id="Ara2.AraTextBox" version="1.0.0.0"/>          
