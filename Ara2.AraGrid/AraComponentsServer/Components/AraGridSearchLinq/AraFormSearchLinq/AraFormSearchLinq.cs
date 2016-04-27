@@ -78,12 +78,14 @@ namespace Ara2.Grid
             bCancelar.Anchor.Right = 10;
 
 
-            Grid = new AraGridSearchLinq(this, GetQuery.InvokeEvent,  OnCommitBefore.InvokeEvent);
+            Grid = new AraGridSearchLinq(this, GetQuery.InvokeEvent, Grid_OnCommitBefore);
             Grid.Anchor.Top = 10;
             Grid.Anchor.Left  = 10;
             Grid.Anchor.Right = 10;
             Grid.Anchor.Bottom = 40;
             Grid.ReturnSearch += Grid_ReturnSearch;
+            Grid.OnLoadData += Grid_OnLoadData;
+            Grid.Grid.KeyDown += Grid_KeyDown;
         }
 
         void Grid_ReturnSearch(AraGrid Object, AraGridRow Row)
@@ -91,6 +93,42 @@ namespace Ara2.Grid
             this.Close(Row);
         }
 
+        void Grid_OnCommitBefore(AraGridSearchLinq vGrid)
+        {
+            if (OnCommitBefore.InvokeEvent!=null)
+                OnCommitBefore.InvokeEvent(vGrid);
+            
+        }
+        bool PrimeiroFoto = true;
+        void GridSetFocus()
+        {
+            if (PrimeiroFoto)
+            {
+                try
+                {
+                    if (Grid.Grid.Rows.Count > 0)
+                    {
+                        string ColName = Grid.Grid.Cols.ToArray().Where(a => a.hidden == false).FirstOrDefault().Index;
+                        Grid.Grid.Rows[0][ColName].SetFocus();
+                        PrimeiroFoto = false;
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void Grid_OnLoadData(AraGridSearchLinq vGrid)
+        {
+            AraTools.AsynchronousFunction(GridSetFocus);
+        }
+
+        private void Grid_KeyDown(AraGrid Object, int vKey)
+        {
+            if (vKey == 13 && !string.IsNullOrEmpty(Grid.Grid.SelRow) && Grid.Grid.SelRow != "Search")
+            {
+                Grid_ReturnSearch(Grid.Grid, Grid.Grid.Rows[Grid.Grid.SelRow]);
+            }
+        }
 
         public void bCancelar_Click(object vObj, EventArgs e)
         {

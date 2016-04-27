@@ -43,8 +43,12 @@
       <HintPath>..\packages\Ara2.AraDiv.1.0.0.2\lib\net40\Ara2.AraDiv.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ara2.AraLabel, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ara2.AraLabel.1.0.0.1\lib\net40\Ara2.AraLabel.dll</HintPath>
+    <Reference Include="Ara2.AraForeignKey, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraForeignKey.1.0.0.0\lib\net40\Ara2.AraForeignKey.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ara2.AraLabel, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraLabel.1.0.0.2\lib\net40\Ara2.AraLabel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ara2.AraMenu, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -55,8 +59,20 @@
       <HintPath>..\packages\Ara2.AraSelect.1.0.0.0\lib\net40\Ara2.AraSelect.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ara2.AraSplitContainers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraSplitContainers.1.0.0.0\lib\net40\Ara2.AraSplitContainers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ara2.AraTable, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Ara2.AraTable.1.0.0.0\lib\net40\Ara2.AraTable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ara2.AraTabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraTabs.1.0.0.0\lib\net40\Ara2.AraTabs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ara2.AraTextBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraTextBox.1.0.0.0\lib\net40\Ara2.AraTextBox.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ara2.AraTimer, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
@@ -96,6 +112,12 @@
     <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridColGroup.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridColGroups.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinq.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterDateTime\FrmAraGridSearchLinqFilterDateTime.AraDesign.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterDateTime\FrmAraGridSearchLinqFilterDateTime.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterNumero\FrmAraGridSearchLinqFilterNumero.AraDesign.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterNumero\FrmAraGridSearchLinqFilterNumero.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterString\FrmAraGridSearchLinqFilterString.AraDesign.cs" />
+    <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterString\FrmAraGridSearchLinqFilterString.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.AraDesign.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.cs" />
     <Compile Include="AraComponentsServer\Components\AraGrid\AraGrid.cs" />
@@ -123,6 +145,9 @@
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmResultSum\AraGridTreeGroupFrmResultSum.htm" />
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmSelection\AraGridTreeGroupFrmSelection.htm" />
     <Content Include="Nuget\NuGet.exe" />
+    <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterDateTime\FrmAraGridSearchLinqFilterDateTime.AraDesign.json" />
+    <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterNumero\FrmAraGridSearchLinqFilterNumero.AraDesign.json" />
+    <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterString\FrmAraGridSearchLinqFilterString.AraDesign.json" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.AraDesign" />
     <None Include="Nuget\Ara2.AraGrid.nuspec" />
     <None Include="packages.config" />

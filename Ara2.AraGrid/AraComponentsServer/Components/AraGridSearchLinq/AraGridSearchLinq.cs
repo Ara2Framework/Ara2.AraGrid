@@ -9,6 +9,7 @@ using Ara2.Dev;
 using System.Linq.Dynamic;
 using Ara2.Grid.Export;
 using System.Linq.Expressions;
+using Ara2.Grid.Filters.Forms;
 
 namespace Ara2.Grid
 {
@@ -259,7 +260,7 @@ namespace Ara2.Grid
         
 
         [Serializable]
-        public struct SColuna
+        public class SColuna
         {
             public string Name;
             public enum_TipoColuna Tipo;
@@ -574,14 +575,16 @@ namespace Ara2.Grid
                         }
 
                         if (!Ignorar)
-                            if (Cell.Text == "" || Cell.Text == null)
+                        {
+                            if (Cell.Text == null
+                                || string.IsNullOrEmpty(Cell.Text)
+                                || string.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(Cell.Text, @"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?>", String.Empty))
+                                )
                                 Ignorar = true;
+                        }
 
                         if (!Ignorar)
-                        {
-                            if (Cell.Text.Trim() != "")
-                                Filter[Cell.Col.Name] = Cell.Text;
-                        }
+                            Filter[Cell.Col.Name] = System.Text.RegularExpressions.Regex.Replace(Cell.Text, @"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?>", String.Empty).Trim();
                     }
                 }
             }
@@ -597,15 +600,37 @@ namespace Ara2.Grid
                 {
                     foreach (string ColName in Filter.Keys)
                     {
-                        this.Grid.Rows["Search"][ColName].Text = Filter[ColName] + (vTouch ? Grid.Buttons.Add(AraGridButton.ButtonIco.pencil, new System.Collections.Hashtable { { "ColName", ColName } }, EditCell) : "");
+                        if (this.Grid.Rows["Search"][ColName].Text != Filter[ColName])
+                            this.Grid.Rows["Search"][ColName].Text = Filter[ColName];
                     }
+
+                    if (Tocuh)
+                    {
+                        foreach (AraGridCol Col in this.Grid.Cols.ToArray())
+                        {
+                            this.Grid.Rows["Search"][Col].Text += " " +
+                                Grid.Buttons.Add(AraGridButton.ButtonIco.pencil, new System.Collections.Hashtable { { "ColName", Col.Name } }, EditCell);
+                        }
+                    }
+
 
                     foreach (AraGridCol Col in this.Grid.Cols.ToArray())
                     {
-                        if (!Filter.ContainsKey(Col.Name))
-                            this.Grid.Rows["Search"][Col].Text = (vTouch ? 
-                                Grid.Buttons.Add(AraGridButton.ButtonIco.pencil, new System.Collections.Hashtable { { "ColName", Col.Name } }, EditCell)
-                                : "");
+                        if (ColsInfo[Col.Name].Tipo == enum_TipoColuna.Texto)
+                            this.Grid.Rows["Search"][Col].Text +=
+                                " <div style='position:relative;float:right;'>" +
+                                Grid.Buttons.Add<Action<string>>(AraGridButton.ButtonIco.triangle_1_s, FilterStringPlus, Col.Name)
+                                + "</div>";
+                        else if (ColsInfo[Col.Name].Tipo == enum_TipoColuna.Numero || ColsInfo[Col.Name].Tipo == enum_TipoColuna.Numerointero)
+                            this.Grid.Rows["Search"][Col].Text +=
+                                " <div style='position:relative;float:right;'>" +
+                                Grid.Buttons.Add<Action<string>>(AraGridButton.ButtonIco.triangle_1_s, FilterNumeroPlus, Col.Name)
+                                + "</div>";
+                        else if (ColsInfo[Col.Name].Tipo == enum_TipoColuna.Data || ColsInfo[Col.Name].Tipo == enum_TipoColuna.DataHora || ColsInfo[Col.Name].Tipo == enum_TipoColuna.Hora)
+                            this.Grid.Rows["Search"][Col].Text +=
+                                " <div style='position:relative;float:right;'>" +
+                                Grid.Buttons.Add<Action<string>>(AraGridButton.ButtonIco.triangle_1_s, FilterDateTimePlus, Col.Name)
+                                + "</div>";
                     }
 
                 }
@@ -633,6 +658,130 @@ namespace Ara2.Grid
             else if (this.Filter.ContainsKey(EditCell_ColName))
                 this.Filter.Remove(EditCell_ColName);
 
+            this.FilterSaveToGrid();
+
+            EditCell_ColName = null;
+            this.PageReload();
+        }
+
+        private string TmpFiltroAntigoPlus = null;
+        public void FilterStringPlus(string vColName)
+        {
+            EditCell_ColName = vColName;
+
+            if (this.Filter.ContainsKey(EditCell_ColName) && !string.IsNullOrEmpty(this.Filter[EditCell_ColName]))
+            {
+                TmpFiltroAntigoPlus = this.Filter[EditCell_ColName];
+                this.Filter[EditCell_ColName]="";
+                this.FilterSaveToGrid();
+            }
+            else
+                TmpFiltroAntigoPlus = null;
+
+            FrmAraGridSearchLinqFilterString FrmAraGridSearchLinqFilterString = new FrmAraGridSearchLinqFilterString(this, this, ColsInfo[vColName], this.Filter[vColName]);
+            FrmAraGridSearchLinqFilterString.Show(FrmAraGridSearchLinqFilterString_Return);
+        }
+
+        private void FrmAraGridSearchLinqFilterString_Return(object vObj)
+        {
+            if (vObj !=null)
+            {
+                if (this.Filter.ContainsKey(EditCell_ColName))
+                    this.Filter[EditCell_ColName] = vObj.ToString();
+                else
+                    this.Filter.Add(EditCell_ColName, vObj.ToString());
+                this.FilterSaveToGrid();
+            }
+            else if (TmpFiltroAntigoPlus !=null)
+            { 
+                if (this.Filter.ContainsKey(EditCell_ColName))
+                    this.Filter[EditCell_ColName] = TmpFiltroAntigoPlus;
+                else
+                    this.Filter.Add(EditCell_ColName, TmpFiltroAntigoPlus);
+                this.FilterSaveToGrid();
+            }
+
+
+            EditCell_ColName = null;
+            this.PageReload();
+        }
+
+        public void FilterNumeroPlus(string vColName)
+        {
+            EditCell_ColName = vColName;
+
+            if (this.Filter.ContainsKey(EditCell_ColName) && !string.IsNullOrEmpty(this.Filter[EditCell_ColName]))
+            {
+                TmpFiltroAntigoPlus = this.Filter[EditCell_ColName];
+                this.Filter[EditCell_ColName] = "";
+                this.FilterSaveToGrid();
+            }
+            else
+                TmpFiltroAntigoPlus = null;
+
+            FrmAraGridSearchLinqFilterNumero FrmAraGridSearchLinqFilterNumero = new FrmAraGridSearchLinqFilterNumero(this, this, ColsInfo[vColName], this.Filter[vColName]);
+            FrmAraGridSearchLinqFilterNumero.Show(FrmAraGridSearchLinqFilterNumero_Return);
+        }
+
+        private void FrmAraGridSearchLinqFilterNumero_Return(object vObj)
+        {
+            if (vObj != null)
+            {
+                if (this.Filter.ContainsKey(EditCell_ColName))
+                    this.Filter[EditCell_ColName] = vObj.ToString();
+                else
+                    this.Filter.Add(EditCell_ColName, vObj.ToString());
+                this.FilterSaveToGrid();
+            }
+            else if (TmpFiltroAntigoPlus != null)
+            {
+                if (this.Filter.ContainsKey(EditCell_ColName))
+                    this.Filter[EditCell_ColName] = TmpFiltroAntigoPlus;
+                else
+                    this.Filter.Add(EditCell_ColName, TmpFiltroAntigoPlus);
+                this.FilterSaveToGrid();
+            }
+
+            EditCell_ColName = null;
+            this.PageReload();
+        }
+
+        public void FilterDateTimePlus(string vColName)
+        {
+            EditCell_ColName = vColName;
+
+            if (this.Filter.ContainsKey(EditCell_ColName) && !string.IsNullOrEmpty(this.Filter[EditCell_ColName]))
+            {
+                TmpFiltroAntigoPlus = this.Filter[EditCell_ColName];
+                this.Filter[EditCell_ColName] = "";
+                this.FilterSaveToGrid();
+            }
+            else
+                TmpFiltroAntigoPlus = null;
+
+            FrmAraGridSearchLinqFilterDateTime FrmAraGridSearchLinqFilterDateTime = new FrmAraGridSearchLinqFilterDateTime(this, this, ColsInfo[vColName], this.Filter[vColName]);
+            FrmAraGridSearchLinqFilterDateTime.Show(FrmAraGridSearchLinqFilterDateTime_Return);
+        }
+
+        private void FrmAraGridSearchLinqFilterDateTime_Return(object vObj)
+        {
+            if (vObj != null)
+            {
+                if (this.Filter.ContainsKey(EditCell_ColName))
+                    this.Filter[EditCell_ColName] = vObj.ToString();
+                else
+                    this.Filter.Add(EditCell_ColName, vObj.ToString());
+                this.FilterSaveToGrid();
+            }
+            else if (TmpFiltroAntigoPlus != null)
+            {
+                if (this.Filter.ContainsKey(EditCell_ColName))
+                    this.Filter[EditCell_ColName] = TmpFiltroAntigoPlus;
+                else
+                    this.Filter.Add(EditCell_ColName, TmpFiltroAntigoPlus);
+                this.FilterSaveToGrid();
+            }
+
             EditCell_ColName = null;
             this.PageReload();
         }
@@ -655,7 +804,7 @@ namespace Ara2.Grid
                        
             foreach (string ColName in Filter.Keys.ToArray())
             {
-                string vText = Filter[ColName].Trim();
+                string vText = System.Text.RegularExpressions.Regex.Replace(Filter[ColName], @"</?\w+((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)/?>", String.Empty).Trim();
                 var vTipo = ColsInfo[ColName].Tipo;
 
                 bool vFiltroNormal = true;
@@ -687,152 +836,125 @@ namespace Ara2.Grid
                     {
                         case enum_TipoColuna.Texto:
                             {
-                                foreach (var vPalavra in vText.Split(' ').AsQueryable().Where(a => a.Trim() != ""))
-                                    vReturnQuery = vReturnQuery.Where("" + ColName + ".ToUpper().Contains(@0.ToUpper())", vPalavra);
+                                if (vText.Length > 0 && vText.Substring(0, 1) == "=")
+                                {
+                                    var JSon = TryJsonParse(vText.Substring(1, vText.Length - 1));
+                                    if (JSon != null)
+                                    {
+                                        List<object> vTmpStringParans = new List<object>();
+                                        StringBuilder vTmpScript = new StringBuilder();
+
+                                        foreach (string vTextoParte in (string[])JSon)
+                                        {
+                                            if (vTextoParte.Length > 0)
+                                            {
+                                                if (vTmpScript.Length > 0)
+                                                    vTmpScript.Append(" || ");
+
+                                                vTmpScript.Append("(");
+
+                                                if (vTextoParte.Substring(0, 1) == "=")
+                                                {
+                                                    vTmpScript.Append("" + ColName + ".ToUpper().Trim() == @" + vTmpStringParans.Count );
+                                                    vTmpStringParans.Add(vTextoParte.Substring(1, vTextoParte.Length - 1).ToUpper().Trim());
+                                                }
+                                                else
+                                                {
+                                                    bool Primeiro = true;
+                                                    foreach (var vPalavra in vTextoParte.Split(' ').AsQueryable().Where(a => a.Trim() != ""))
+                                                    {
+                                                        if (Primeiro)
+                                                            Primeiro = false;
+                                                        else
+                                                            vTmpScript.Append(" && ");
+                                                        vTmpScript.Append("" + ColName + ".ToUpper().Contains(@" + vTmpStringParans.Count + ".ToUpper())");
+                                                        vTmpStringParans.Add(vPalavra);
+                                                    }
+                                                }
+                                                vTmpScript.Append(") ");
+                                            }
+                                        }
+
+                                        vReturnQuery = vReturnQuery.Where(vTmpScript.ToString(), vTmpStringParans.ToArray());
+                                        vTmpScript.Clear();
+                                        vTmpScript = null;
+                                    }
+                                    else
+                                        vReturnQuery = vReturnQuery.Where("" + ColName + ".ToUpper().Trim() == @0", vText.Substring(1, vText.Length - 1).ToUpper().Trim());
+                                }
+                                else
+                                {
+                                    foreach (var vPalavra in vText.Split(' ').AsQueryable().Where(a => a.Trim() != ""))
+                                        vReturnQuery = vReturnQuery.Where("" + ColName + ".ToUpper().Contains(@0.ToUpper())", vPalavra);
+                                }
                             }
                             break;
                         case enum_TipoColuna.Numerointero:
                         case enum_TipoColuna.Numero:
-                            if (vText.Substring(0, 1) == ">")
-                                vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") > " + vText.Substring(1, vText.Length - 1).Trim());
-                            else if (vText.Substring(0, 1) == "<")
-                                vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") < " + vText.Substring(1, vText.Length - 1).Trim());
-                            else
                             {
-                                decimal vTmpint64 = 0;
-                                try
+                                if (vText.Length >= 1)
                                 {
-                                    vTmpint64 = Convert.ToDecimal(vText);
-                                }
-                                catch { }
-
-                                vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") == @0", vTmpint64);
-                            }
-                            break;
-                        case enum_TipoColuna.DataHora:
-
-                            if (vText.Substring(0, 1) == ">")
-                            {
-                                string Data = vText.Substring(1, vText.Length - 1);
-
-                                if (AraTools.IsDate(Data))
-                                {
-                                    if ((new System.Text.RegularExpressions.Regex(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)")).IsMatch(Data))
+                                    if (vText.Substring(0, 1) == "=")
                                     {
-                                        //vReturnQuery = vReturnQuery.Where("Convert.ToDateTime(" + ColName + ").Date >= @0 ", DateTime.Parse(Data).Date);
-                                        vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?@0:" + ColName + ") > @1 ", new DateTime(1900, 1, 1), DateTime.Parse(Data).Date);
-                                        vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
-                                    }
-                                    else if ((new System.Text.RegularExpressions.Regex(@"^((((31\/(0?[13578]|1[02]))|((29|30)\/(0?[1,3-9]|1[0-2])))\/(1[6-9]|[2-9]\d)?\d{2})|(29\/0?2\/(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))|(0?[1-9]|1\d|2[0-8])\/((0?[1-9])|(1[0-2]))\/((1[6-9]|[2-9]\d)?\d{2})) (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$")).IsMatch(Data))
-                                    {
-                                        //vReturnQuery = vReturnQuery.Where("Convert.ToDateTime(" + ColName + ") >= @0 ", DateTime.Parse(Data));
-                                        vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?@0:" + ColName + ") > @1 ", new DateTime(1900, 1, 1), DateTime.Parse(Data).Date);
-                                        vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
+                                        var JSon = TryJsonParse(vText.Substring(1, vText.Length - 1));
+                                        if (JSon != null)
+                                        {
+                                            foreach (string vTextoParte in (string[])JSon)
+                                            {
+                                                SqlFiltroNumero(ref vReturnQuery, vTextoParte, ColName);
+                                            }
+                                        }
+                                        else
+                                            AraTools.Alert("Filtro Invalido!");
                                     }
                                     else
-                                    {
-                                        AraTools.Alert("O valor \"" + vText + "\" não é uma data valida");
-                                        vText = "";
-                                    }
+                                        SqlFiltroNumero(ref vReturnQuery, vText, ColName);
                                 }
-                                else
-                                {
-                                    AraTools.Alert("O valor \"" + vText + "\" não é uma data valida");
-                                    vText = "";
-                                }
-                            }
-                            else if (vText.Substring(0, 1) == "<")
-                            {
-                                string Data = vText.Substring(1, vText.Length - 1);
-
-                                if (AraTools.IsDate(Data))
-                                {
-
-                                    if ((new System.Text.RegularExpressions.Regex(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)")).IsMatch(Data))
-                                    {
-                                        vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?@0:" + ColName + ") < @1 ", new DateTime(1900, 1, 1), DateTime.Parse(Data).Date);
-                                        vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
-                                    }
-                                    else if ((new System.Text.RegularExpressions.Regex(@"^((((31\/(0?[13578]|1[02]))|((29|30)\/(0?[1,3-9]|1[0-2])))\/(1[6-9]|[2-9]\d)?\d{2})|(29\/0?2\/(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))|(0?[1-9]|1\d|2[0-8])\/((0?[1-9])|(1[0-2]))\/((1[6-9]|[2-9]\d)?\d{2})) (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$")).IsMatch(Data))
-                                    {
-                                        //vReturnQuery = vReturnQuery.Where("Convert.ToDateTime(" + ColName + ") <= @0 ", DateTime.Parse(Data));
-                                        vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?@0:" + ColName + ") < @1 ", new DateTime(1900, 1, 1), DateTime.Parse(Data).Date);
-                                        vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
-                                    }
-                                    else
-                                    {
-                                        AraTools.Alert("O valor \"" + vText + "\" não é uma data valida");
-                                        vText = "";
-                                    }
-                                }
-                                else
-                                {
-                                    AraTools.Alert("O valor \"" + vText + "\" não é uma data valida");
-                                    vText = "";
-                                }
-                            }
-                            else if (vText.ToLower().IndexOf(" até ") > 0 || vText.ToLower().IndexOf(" ate ") > 0)
-                            {
-
-                                int PosAte = vText.ToLower().IndexOf(" até ");
-                                if (PosAte == -1)
-                                    PosAte = vText.ToLower().IndexOf(" ate ");
-
-                                string Data1 = vText.Substring(0, PosAte);
-                                string Data2 = vText.Substring(PosAte + " até ".Length, vText.Length - (PosAte + " até ".Length));
-
-                                if (AraTools.IsDate(Data1) && AraTools.IsDate(Data2))
-                                {                               
-                                    if ((new System.Text.RegularExpressions.Regex(@"^((((31\/(0?[13578]|1[02]))|((29|30)\/(0?[1,3-9]|1[0-2])))\/(1[6-9]|[2-9]\d)?\d{2})|(29\/0?2\/(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))|(0?[1-9]|1\d|2[0-8])\/((0?[1-9])|(1[0-2]))\/((1[6-9]|[2-9]\d)?\d{2})) (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$")).IsMatch(Data1)
-                                        && (new System.Text.RegularExpressions.Regex(@"^((((31\/(0?[13578]|1[02]))|((29|30)\/(0?[1,3-9]|1[0-2])))\/(1[6-9]|[2-9]\d)?\d{2})|(29\/0?2\/(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))|(0?[1-9]|1\d|2[0-8])\/((0?[1-9])|(1[0-2]))\/((1[6-9]|[2-9]\d)?\d{2})) (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$")).IsMatch(Data2)
-                                        ) // Data Hora
-                                    {
-                                        vReturnQuery = vReturnQuery.Where("" + ColName + " > @0 ", DateTime.Parse(Data1).Date);
-                                        vReturnQuery = vReturnQuery.Where("" + ColName + " < @0 ", DateTime.Parse(Data2).Date);
-                                    }
-                                    else if ((new System.Text.RegularExpressions.Regex(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)")).IsMatch(Data1)
-                                        && (new System.Text.RegularExpressions.Regex(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)")).IsMatch(Data2)
-                                        ) // Data
-                                    {
-                                        vReturnQuery = vReturnQuery.Where("" + ColName + " > @0 ", DateTime.Parse(Data1));
-                                        vReturnQuery = vReturnQuery.Where("" + ColName + " < @0 ", DateTime.Parse(Data2));
-                                    }
-                                    else
-                                    {
-                                        AraTools.Alert("O valor \"" + vText + "\" não é uma data valida");
-                                        vText = "";
-                                    }
-                                }
-                                else
-                                {
-                                    AraTools.Alert("O valor \"" + vText + "\" não é uma data valida");
-                                    vText = "";
-                                }
-                             
-                            
-                            }
-                            else if ((new System.Text.RegularExpressions.Regex(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)")).IsMatch(vText))
-                                vReturnQuery = vReturnQuery.Where(" " + ColName + " != null && " + ColName + ".Value.Day  == @0 && " + ColName + ".Value.Month  == @1 && " + ColName + ".Value.Year  == @2 ", DateTime.Parse(vText).Day, DateTime.Parse(vText).Month, DateTime.Parse(vText).Year);
-                            else if ((new System.Text.RegularExpressions.Regex(@"^((((31\/(0?[13578]|1[02]))|((29|30)\/(0?[1,3-9]|1[0-2])))\/(1[6-9]|[2-9]\d)?\d{2})|(29\/0?2\/(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))|(0?[1-9]|1\d|2[0-8])\/((0?[1-9])|(1[0-2]))\/((1[6-9]|[2-9]\d)?\d{2})) (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$")).IsMatch(vText))
-                                vReturnQuery = vReturnQuery.Where("" + ColName + " == @0 ", DateTime.Parse(vText));
-                            else
-                            {
-                                AraTools.Alert("O valor \"" + vText + "\" não é uma valor valido.");
-                                vText = "";
                             }
                             break;
                         case enum_TipoColuna.Hora:
 
-                            //Para testar -> http://regexpal.com/
-                            if ((new System.Text.RegularExpressions.Regex("[0-2]{0,1}[0-9]:[0-5]{0,1}[0-9](:[0-5]{0,1}[0-9]){0,3}")).IsMatch(vText))
-                                 vReturnQuery = vReturnQuery.Where("Convert.ToDateTime(" + ColName + ").TimeOfDay == @0 ", DateTime.Parse("01/01/1900 " + vText).TimeOfDay);
-                            else
+                            if (vText.Length > 0)
                             {
-                                AraTools.Alert("O valor \"" + vText + "\" não é uma valor valido.");
-                                vText = "";
-                             }
+                                if (vText.Substring(0, 1) == "=")
+                                {
+                                    var JSon = TryJsonParse(vText.Substring(1, vText.Length - 1));
+                                    if (JSon != null)
+                                    {
+                                        foreach (string vTextoParte in (string[])JSon)
+                                        {
+                                            SqlFiltroHora(ref vReturnQuery, vTextoParte, ColName);
+                                        }
+                                    }
+                                    else
+                                        AraTools.Alert("Filtro Invalido!");
+                                }
+                                else
+                                    SqlFiltroHora(ref vReturnQuery, vText, ColName);
 
+                            }
                             break;
+                        case enum_TipoColuna.DataHora:
+                            if (vText.Length > 0)
+                            {
+                                if (vText.Substring(0, 1) == "=")
+                                {
+                                    var JSon = TryJsonParse(vText.Substring(1, vText.Length - 1));
+                                    if (JSon != null)
+                                    {
+                                        foreach (string vTextoParte in (string[])JSon)
+                                        {
+                                            SqlFiltroDataHora(ref vReturnQuery, vTextoParte, ColName);
+                                        }
+                                    }
+                                    else
+                                        AraTools.Alert("Filtro Invalido!");
+                                }
+                                else
+                                    SqlFiltroDataHora(ref vReturnQuery, vText, ColName);                               
+                            }
+                            break;
+                        
                     }
                 }
                 Filter[ColName] = vText;
@@ -843,6 +965,124 @@ namespace Ara2.Grid
 
 
             return vReturnQuery;
+        }
+
+        private void SqlFiltroDataHora(ref IQueryable<object> vReturnQuery, string vText, string ColName)
+        {
+            ClassCondicaoDateTime CN = ClassCondicaoDateTime.TryParse(vText);
+
+            if (CN != null)
+            {
+
+                if (CN.Sinal == ">")
+                {
+                    vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
+                    vReturnQuery = vReturnQuery.Where(ColName + " > @0 ", CN.DataHora);
+                }
+                else if (CN.Sinal == "<")
+                {
+                    vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
+                    vReturnQuery = vReturnQuery.Where(ColName + " < @0 ", CN.DataHora);
+                }
+                else if (CN.Sinal == "=")
+                {
+                    vReturnQuery = vReturnQuery.Where(" " + ColName + " != null ");
+                    vReturnQuery = vReturnQuery.Where(ColName + " = @0 ", CN.DataHora);
+                }
+                else
+                    AraTools.Alert("Sinal invalido.");
+
+            }
+            else
+            {
+                ClassDateTimeIntervalo Intervalo = ClassDateTimeIntervalo.TryParse(vText);
+                if (Intervalo != null)
+                {
+                    vReturnQuery = vReturnQuery.Where(ColName + " > @0 ", Intervalo.DataIni);
+                    vReturnQuery = vReturnQuery.Where(ColName + " < @0 ", Intervalo.DataFim);
+                }
+                else if ((new System.Text.RegularExpressions.Regex(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)")).IsMatch(vText))
+                    vReturnQuery = vReturnQuery.Where(" " + ColName + " != null && " + ColName + ".Value.Day  == @0 && " + ColName + ".Value.Month  == @1 && " + ColName + ".Value.Year  == @2 ", DateTime.Parse(vText).Day, DateTime.Parse(vText).Month, DateTime.Parse(vText).Year);
+                else if (AraTools.IsDate(vText))
+                    vReturnQuery = vReturnQuery.Where("" + ColName + " == @0 ", DateTime.Parse(vText));
+                else
+                {
+                    AraTools.Alert("O valor \"" + vText + "\" não é uma valor valido.");
+                    vText = "";
+                }
+            }
+        }
+
+        private void SqlFiltroNumero(ref IQueryable<object> vReturnQuery, string vText, string ColName)
+        {
+            ClassCondicaoNumero CN = ClassCondicaoNumero.TryParse(vText);
+
+            if (CN != null)
+            {
+                if (CN.Sinal == ">")
+                    vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") > " + CN.Numero.ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US")));
+                else if (CN.Sinal == "<")
+                    vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") < " + CN.Numero.ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US")));
+                else if (CN.Sinal == "=")
+                    vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") == " + CN.Numero.ToString(System.Globalization.CultureInfo.GetCultureInfo("en-US")));
+                else
+                    throw new Exception("Sinal '" + CN.Sinal + "' não suportado!");
+            }
+            else
+            {
+                decimal vTmpint64 = 0;
+
+                if (decimal.TryParse(vText, out vTmpint64))
+                {
+                    vReturnQuery = vReturnQuery.Where("(" + ColName + " == null?0:" + ColName + ") == @0", vTmpint64);
+                }
+                else
+                    throw new Exception(" Numero '" + vText + "' invalido.");
+            }
+        }
+
+        private void SqlFiltroHora(ref IQueryable<object> vReturnQuery, string vText, string ColName)
+        {
+            ClassCondicaoTimeSpan CondicaoTimeSpan = ClassCondicaoTimeSpan.TryParse(vText);
+
+            if (CondicaoTimeSpan != null)
+            {
+                if (CondicaoTimeSpan.Sinal == "=")
+                    vReturnQuery = vReturnQuery.Where(ColName + " == @0 ", CondicaoTimeSpan.Hora);
+                else if (CondicaoTimeSpan.Sinal == "<")
+                    vReturnQuery = vReturnQuery.Where(ColName + " < @0 ", CondicaoTimeSpan.Hora);
+                else if (CondicaoTimeSpan.Sinal == ">")
+                    vReturnQuery = vReturnQuery.Where(ColName + " > @0 ", CondicaoTimeSpan.Hora);
+                else
+                    AraTools.Alert("Sinal do iltro Invalido!");
+            }
+            else
+            {
+                ClassTimeSpanIntervalo Intervalo = ClassTimeSpanIntervalo.TryParse(vText);
+
+                if (Intervalo != null)
+                {
+                    vReturnQuery = vReturnQuery.Where(ColName + " > @0 ", Intervalo.Inicio);
+                    vReturnQuery = vReturnQuery.Where(ColName + " < @0 ", Intervalo.Fim);
+                }
+                else
+                {
+                    TimeSpan vTmpHora;
+                    if (TimeSpan.TryParse(vText, out vTmpHora))
+                        vReturnQuery = vReturnQuery.Where(ColName + " == @0 ", vTmpHora);
+                    else
+                        AraTools.Alert("Valor do filtro Invalido!");
+                }
+            }
+        }
+
+        private dynamic TryJsonParse(string vJson)
+        {
+            try
+            {
+                return Json.DynamicJson.Parse(vJson);
+            }
+            catch { return null; }
         }
 
         public IQueryable<object> SqlGroup(IQueryable<object> vQuery)
@@ -934,7 +1174,10 @@ namespace Ara2.Grid
 
         private void MsgCarregando()
         {
-            LoadData();
+            lock (this)
+            {
+                LoadData();
+            }
         }
 
         public bool Tocuh
@@ -946,6 +1189,8 @@ namespace Ara2.Grid
             }
         }
 
+        [AraDevEvent]
+        public AraEvent<Action<AraGridSearchLinq>> OnLoadData = new AraEvent<Action<AraGridSearchLinq>>();
 
         public void LoadData()
         {
@@ -1031,6 +1276,9 @@ namespace Ara2.Grid
                 this.Grid.Tree.RetraiAllRows();
 
             AraTools.AsynchronousFunction(LoadTotalPages);
+
+            if (OnLoadData.InvokeEvent != null)
+                OnLoadData.InvokeEvent(this);
 
         }
 
@@ -1262,6 +1510,243 @@ namespace Ara2.Grid
 
             return ColunaInterna;
         }
+
+        #region FrmAraGridSearchLinqFilterNumero
+
+        
+
+        public class ClassCondicaoNumero
+        {
+            public string Sinal;
+            public decimal Numero;
+
+            public static readonly string[] SinaisValidos = new string[]{
+                ">",
+                "<",
+                "="
+            };
+
+            public static ClassCondicaoNumero TryParse(string vTexto)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(vTexto))
+                    {
+                        string vTmpSinal;
+                        string vTmpNumero;
+
+                        var vTmp = vTexto.Trim().Replace("  ", " ").Split(' ');
+                        if (vTmp.Length == 2)
+                        {
+                            vTmpSinal = vTmp[0];
+                            vTmpNumero = vTmp[1];
+                        }
+                        else if (vTexto.Length >= 2)
+                        {
+                            vTmpSinal = vTexto.Substring(0, 1);
+                            vTmpNumero = vTexto.Substring(1, vTexto.Length - 1);
+                        }
+                        else
+                            return null;
+
+                        ClassCondicaoNumero CondicaoNumero = new ClassCondicaoNumero();
+                        CondicaoNumero.Sinal = vTmpSinal;
+
+                        if (!SinaisValidos.Contains( CondicaoNumero.Sinal))
+                            return null;
+                        if (!decimal.TryParse(vTmpNumero, out CondicaoNumero.Numero))
+                            return null;
+                        return CondicaoNumero;
+                    }
+                    else
+                        return null;
+                }
+                catch { return null; }
+            }
+        }
+        #endregion
+
+        #region FrmAraGridSearchLinqFilterDateTime
+
+        public class ClassCondicaoDateTime
+        {
+            public string Sinal;
+            public DateTime DataHora;
+
+            public static readonly string[] SinaisValidos = new string[]{
+                ">",
+                "<",
+                "="
+            };
+
+            public static ClassCondicaoDateTime TryParse(string vTexto)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(vTexto))
+                    {
+                        string vTmpSinal;
+                        string vTmpNumero;
+
+                        var vTmp = vTexto.Trim().Replace("  ", " ").Split(' ');
+                        if (vTmp.Length == 2)
+                        {
+                            vTmpSinal = vTmp[0];
+                            vTmpNumero = vTmp[1];
+                        }
+                        else if (vTexto.Length >= 2)
+                        {
+                            vTmpSinal = vTexto.Substring(0, 1);
+                            vTmpNumero = vTexto.Substring(1, vTexto.Length - 1);
+                        }
+                        else
+                            return null;
+
+                        ClassCondicaoDateTime CondicaoDateTime = new ClassCondicaoDateTime();
+                        CondicaoDateTime.Sinal = vTmpSinal;
+
+                        if (!SinaisValidos.Contains(CondicaoDateTime.Sinal))
+                            return null;
+                        if (!DateTime.TryParse(vTmpNumero, out CondicaoDateTime.DataHora))
+                            return null;
+                        return CondicaoDateTime;
+                    }
+                    else
+                        return null;
+                }
+                catch { return null; }
+            }
+        }
+
+        public class ClassCondicaoTimeSpan
+        {
+            public string Sinal;
+            public TimeSpan Hora;
+
+            public static readonly string[] SinaisValidos = new string[]{
+                ">",
+                "<",
+                "="
+            };
+
+            public static ClassCondicaoTimeSpan TryParse(string vTexto)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(vTexto))
+                    {
+                        string vTmpSinal;
+                        string vTmpNumero;
+
+                        var vTmp = vTexto.Trim().Replace("  ", " ").Split(' ');
+                        if (vTmp.Length == 2)
+                        {
+                            vTmpSinal = vTmp[0];
+                            vTmpNumero = vTmp[1];
+                        }
+                        else if (vTexto.Length >= 2)
+                        {
+                            vTmpSinal = vTexto.Substring(0, 1);
+                            vTmpNumero = vTexto.Substring(1, vTexto.Length - 1);
+                        }
+                        else
+                            return null;
+
+                        ClassCondicaoTimeSpan CondicaoTimeSpan = new ClassCondicaoTimeSpan();
+                        CondicaoTimeSpan.Sinal = vTmpSinal;
+
+                        if (!SinaisValidos.Contains(CondicaoTimeSpan.Sinal))
+                            return null;
+                        if (!TimeSpan.TryParse(vTmpNumero, out CondicaoTimeSpan.Hora))
+                            return null;
+                        return CondicaoTimeSpan;
+                    }
+                    else
+                        return null;
+                }
+                catch { return null; }
+            }
+        }
+
+        public class ClassDateTimeIntervalo
+        {
+            public DateTime DataIni;
+            public DateTime DataFim;
+
+            public static ClassDateTimeIntervalo TryParse(string vTexto)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(vTexto))
+                    {
+
+                        if (!(vTexto.ToUpper().Contains("ATÉ") || vTexto.ToUpper().Contains("ATE")))
+                            return null;
+
+                        int Ate = vTexto.ToUpper().IndexOf("ATE");
+                        if (Ate == -1)
+                            Ate = vTexto.ToUpper().IndexOf("ATÉ");
+                        if (Ate == -1)
+                            return null;
+
+                        if (vTexto.Length < Ate + 3)
+                            return null;
+
+                        ClassDateTimeIntervalo ClassDateTimeIntervalo = new ClassDateTimeIntervalo();
+
+                        if (!DateTime.TryParse(vTexto.Substring(0,Ate).Trim(), out ClassDateTimeIntervalo.DataIni))
+                            return null;
+
+                        if (!DateTime.TryParse(vTexto.Substring(Ate + 3, vTexto.Length - Ate-3).Trim(), out ClassDateTimeIntervalo.DataFim))
+                            return null;
+                        return ClassDateTimeIntervalo;
+
+                    }
+                    else
+                        return null;
+                }
+                catch { return null; }
+            }
+        }
+
+        public class ClassTimeSpanIntervalo
+        {
+            public TimeSpan Inicio;
+            public TimeSpan Fim;
+
+            public static ClassTimeSpanIntervalo TryParse(string vTexto)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(vTexto))
+                    {
+
+                        var vTmp = vTexto.Trim().Replace("  ", " ").Split(' ');
+                        if (vTmp.Length == 3)
+                        {
+                            if (vTmp[1].ToUpper().Trim() != "ATÉ" && vTmp[1].ToUpper().Trim() == "ATE")
+                                return null;
+
+                            ClassTimeSpanIntervalo ClassTimeSpanIntervalo = new ClassTimeSpanIntervalo();
+
+                            if (!TimeSpan.TryParse(vTmp[0], out ClassTimeSpanIntervalo.Inicio))
+                                return null;
+
+                            if (!TimeSpan.TryParse(vTmp[2], out ClassTimeSpanIntervalo.Fim))
+                                return null;
+                            return ClassTimeSpanIntervalo;
+                        }
+                        else
+                            return null;
+                    }
+                    else
+                        return null;
+                }
+                catch { return null; }
+            }
+        }
+
+        #endregion
 
         #region Ara2Dev
         private string _Name = "";
