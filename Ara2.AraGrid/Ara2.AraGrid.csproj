@@ -149,7 +149,9 @@
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterNumero\FrmAraGridSearchLinqFilterNumero.AraDesign.json" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterString\FrmAraGridSearchLinqFilterString.AraDesign.json" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\Options\FrmAraGridSearchLinqExportXLSx\FrmAraGridSearchLinqExportXLSx.AraDesign" />
-    <None Include="Nuget\Ara2.AraGrid.nuspec" />
+    <None Include="Nuget\Ara2.AraGrid.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
