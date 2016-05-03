@@ -70,11 +70,16 @@ namespace Ara2.Grid
         
         public delegate void dOnCommitBefore(AraGridSearchLinq vGrid);
         [AraDevEvent]
-        public AraEvent<dOnCommitBefore> OnCommitBefore = new AraEvent<dOnCommitBefore>();
+        public AraEvent<dOnCommitBefore> OnCommitBefore { get; set; }
 
         public AraGridSearchLinq(IAraObjectClienteServer Container) :
             base(Container)
         {
+            ReturnSearch = new AraEvent<ReturnSearch_delegate>();
+            OnLoadData = new AraEvent<Action<AraGridSearchLinq>>();
+            FiltroCustom = new AraEvent<DFiltroCustom>();
+            OnGridActive = new AraEvent<Action>();
+            OnCommitBefore = new AraEvent<dOnCommitBefore>();
             ColsGroup = new AraGridColGroups(this);
             OnPageReload += this_OnPageReload;
             this.Grid.OnCommitBefore += Tmp_OnCommitBefore;
@@ -230,7 +235,7 @@ namespace Ara2.Grid
         }
         
         [AraDevEvent]
-        public AraEvent<Action> OnGridActive = new AraEvent<Action>();
+        public AraEvent<Action> OnGridActive { get; set; }
         
         private void OnSelColsGrop()
         {
@@ -791,7 +796,7 @@ namespace Ara2.Grid
         public delegate IQueryable<object> DFiltroCustom(IQueryable<object> vQuery, string ColName, enum_TipoColuna Tipo, string vText);
 
         public static event DFiltroCustom FiltroCustomStatic = null;
-        public AraEvent<DFiltroCustom> FiltroCustom = new AraEvent<DFiltroCustom>();
+        public AraEvent<DFiltroCustom> FiltroCustom { get; set; }
 
 
         public IQueryable<object> SqlFiltro(IQueryable<object> vQuery, Dictionary<string, string> Filter, Dictionary<string, SColuna> ColsInfo)
@@ -1190,7 +1195,7 @@ namespace Ara2.Grid
         }
 
         [AraDevEvent]
-        public AraEvent<Action<AraGridSearchLinq>> OnLoadData = new AraEvent<Action<AraGridSearchLinq>>();
+        public AraEvent<Action<AraGridSearchLinq>> OnLoadData { get; set; }
 
         public void LoadData()
         {
@@ -1389,7 +1394,7 @@ namespace Ara2.Grid
 
         public delegate void ReturnSearch_delegate(AraGrid Object, AraGridRow Row);
         [AraDevEvent]
-        public AraEvent<ReturnSearch_delegate> ReturnSearch = new AraEvent<ReturnSearch_delegate>();
+        public AraEvent<ReturnSearch_delegate> ReturnSearch { get; set; }
         private void RunEventReturnSelect(AraGridRow Row)
         {
             try

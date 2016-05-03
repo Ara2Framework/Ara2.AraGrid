@@ -25,6 +25,8 @@ namespace Ara2.Components
             : base(AraObjectClienteServer.Create(ConteinerFather, "table"), ConteinerFather, "AraGrid")
         {
 
+            OnCommitAfter = new AraEvent<dOnCommitBefore>();
+            OnCommitBefore = new AraEvent<dOnCommitBefore>();
             Click = new AraComponentEventKey<EventHandler>(this, "Click");
 
             //Bottom = new AraGridBottom(this);
@@ -494,10 +496,10 @@ namespace Ara2.Components
 
         public delegate void dOnCommitBefore(AraGrid AraGrid);
         [AraDevEvent]
-        public AraEvent<dOnCommitBefore> OnCommitBefore = new AraEvent<dOnCommitBefore>();
+        public AraEvent<dOnCommitBefore> OnCommitBefore { get; set; }
 
         [AraDevEvent]
-        public AraEvent<dOnCommitBefore> OnCommitAfter = new AraEvent<dOnCommitBefore>();
+        public AraEvent<dOnCommitBefore> OnCommitAfter { get; set; }
         
         [AraDevProperty(true)]
         public bool Sortable = true;

@@ -13,6 +13,7 @@ namespace Ara2.Components
         public AraGridBottomNav(IAraObjectClienteServer Container):
             base(Container)
         {
+            OnPageReload = new AraEvent<Action>();
             Bottom_CreateButtons();
         }
 
@@ -202,7 +203,7 @@ namespace Ara2.Components
             lRegistro.Text = Page + "/" + PageMax;
         }
 
-        public AraEvent<Action> OnPageReload = new AraEvent<Action>();
+        public AraEvent<Action> OnPageReload { get; set; }
         public void PageReload()
         {
             try

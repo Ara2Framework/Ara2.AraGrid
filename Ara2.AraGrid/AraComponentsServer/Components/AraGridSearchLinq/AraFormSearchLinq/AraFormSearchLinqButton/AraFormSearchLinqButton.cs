@@ -14,13 +14,13 @@ namespace Ara2.Grid
     public class AraFormSearchLinqButton : AraButton,IAraDev
     {
         [AraDevEvent]
-        public AraEvent<AraWindow.DAraWindowUnload> Return = new AraEvent<AraWindow.DAraWindowUnload>();
+        public AraEvent<AraWindow.DAraWindowUnload> Return { get; set; }
 
         [AraDevEvent]
-        public AraEvent<Func<IQueryable<object>>> GetQuery = new AraEvent<Func<IQueryable<object>>>();
+        public AraEvent<Func<IQueryable<object>>> GetQuery { get; set; }
         
 
-        public AraEvent<AraGridSearchLinq.dOnCommitBefore> OnCommitBefore = new AraEvent<AraGridSearchLinq.dOnCommitBefore>();
+        public AraEvent<AraGridSearchLinq.dOnCommitBefore> OnCommitBefore { get; set; }
 
         public AraFormSearchLinqButton(IAraObject vConteiner, Func<IQueryable<object>> vQuery, AraWindow.DAraWindowUnload vReturnDial)
             : this(vConteiner, vQuery, null, vReturnDial)
@@ -42,6 +42,9 @@ namespace Ara2.Grid
 
         void Construct()
         {
+            OnCommitBefore = new AraEvent<AraGridSearchLinq.dOnCommitBefore>();
+            Return = new AraEvent<AraWindow.DAraWindowUnload>();
+            GetQuery = new AraEvent<Func<IQueryable<object>>>();
             this.Click += OnClick;
             this.Text = "";
             this.Ico = ButtonIco.search;
