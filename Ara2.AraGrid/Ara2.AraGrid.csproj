@@ -43,10 +43,6 @@
       <HintPath>..\packages\Ara2.AraDiv.1.0.0.2\lib\net40\Ara2.AraDiv.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ara2.AraForeignKey, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ara2.AraForeignKey.1.0.0.0\lib\net40\Ara2.AraForeignKey.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Ara2.AraLabel, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Ara2.AraLabel.1.0.0.2\lib\net40\Ara2.AraLabel.dll</HintPath>
       <Private>True</Private>
@@ -102,6 +98,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AraComponentsServer\Components\AraForeignKeyLinq\AraForeignKeyLinq.AraDesign.cs" />
+    <Compile Include="AraComponentsServer\Components\AraForeignKeyLinq\AraForeignKeyLinq.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanelBrowserPages\AraGridBottomNav.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanel\AraGridColsHidden\AraGridColsHidden.cs" />
     <Compile Include="AraComponentsServer\Components\AraGridControlPanel\AraGridControlPanel.cs" />
@@ -145,6 +143,7 @@
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmResultSum\AraGridTreeGroupFrmResultSum.htm" />
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmSelection\AraGridTreeGroupFrmSelection.htm" />
     <Content Include="Nuget\NuGet.exe" />
+    <None Include="AraComponentsServer\Components\AraForeignKeyLinq\AraForeignKeyLinq.AraDesign" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterDateTime\FrmAraGridSearchLinqFilterDateTime.AraDesign.json" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterNumero\FrmAraGridSearchLinqFilterNumero.AraDesign.json" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterString\FrmAraGridSearchLinqFilterString.AraDesign.json" />
@@ -171,7 +170,7 @@
   </PostBuildEventDependsOn>
     <PostBuildEvent>cd $(ProjectDir)Nuget
 del *.nupkg
-nuget.exe pack $(SolutionName).nuspec -version @(VersionNumber)</PostBuildEvent>
+nuget.exe pack $(ProjectName).nuspec -version @(VersionNumber)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
