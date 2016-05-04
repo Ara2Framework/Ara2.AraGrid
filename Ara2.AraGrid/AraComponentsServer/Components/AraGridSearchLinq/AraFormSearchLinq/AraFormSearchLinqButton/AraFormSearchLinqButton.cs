@@ -18,8 +18,8 @@ namespace Ara2.Grid
 
         [AraDevEvent]
         public AraEvent<Func<IQueryable<object>>> GetQuery { get; set; }
-        
 
+        [AraDevEvent]
         public AraEvent<AraGridSearchLinq.dOnCommitBefore> OnCommitBefore { get; set; }
 
         public AraFormSearchLinqButton(IAraObject vConteiner, Func<IQueryable<object>> vQuery, AraWindow.DAraWindowUnload vReturnDial)
@@ -31,6 +31,8 @@ namespace Ara2.Grid
         {
             GetQuery += vQuery;
             Return += vReturnDial;
+
+            OnCommitBefore = new AraEvent<AraGridSearchLinq.dOnCommitBefore>();
             OnCommitBefore += vOnCommitBefore;
         }
 

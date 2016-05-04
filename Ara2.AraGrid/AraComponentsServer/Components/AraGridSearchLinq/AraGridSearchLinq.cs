@@ -63,7 +63,10 @@ namespace Ara2.Grid
             this(Container)
         {
             if (vOnCommitBefore != null)
+            {
+                OnCommitBefore = new AraEvent<dOnCommitBefore>();
                 OnCommitBefore += vOnCommitBefore;
+            }
 
             GetQuery += vGetQuery;
         }
