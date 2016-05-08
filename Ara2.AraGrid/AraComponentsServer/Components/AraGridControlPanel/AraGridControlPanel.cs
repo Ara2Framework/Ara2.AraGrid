@@ -189,8 +189,13 @@ namespace Ara2.Components
             return new AraTableTd(ControlPanelTableTr);
         }
 
+        private AraEvent<Action> _OnReloadControlPanel = new AraEvent<Action>();
         [AraDevEvent]
-        public AraEvent<Action> OnReloadControlPanel = new AraEvent<Action>();
+        public AraEvent<Action> OnReloadControlPanel
+        {
+            get { return _OnReloadControlPanel; }
+            set { _OnReloadControlPanel = value; }
+        }
 
         public void ReloadControlPanel()
         {

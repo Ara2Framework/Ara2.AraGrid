@@ -95,13 +95,23 @@ namespace Ara2.Components
         private Type _codexternoType = null;
         private string _nome = null;
 
+        private AraEvent<OnChange> _Change = new AraEvent<OnChange>();
         [AraDevEvent]
-        public AraEvent<OnChange> Change = new AraEvent<OnChange>();
+        public AraEvent<OnChange> Change
+        {
+            get { return _Change; }
+            set { _Change = value; }
+        }
 
         public delegate void OnChange();
 
+        private AraEvent<OnNew> _New = new AraEvent<OnNew>();
         [AraDevEvent]
-        public AraEvent<OnNew> New = new AraEvent<OnNew>();
+        public AraEvent<OnNew> New
+        {
+            get { return _New; }
+            set { _New = value; }
+        }
         public delegate void OnNew();
 
         private void New_ChangeEnabled()
