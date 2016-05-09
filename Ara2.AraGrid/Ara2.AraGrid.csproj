@@ -67,8 +67,8 @@
       <HintPath>..\packages\Ara2.AraTabs.1.0.0.0\lib\net40\Ara2.AraTabs.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ara2.AraTextBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ara2.AraTextBox.1.0.0.0\lib\net40\Ara2.AraTextBox.dll</HintPath>
+    <Reference Include="Ara2.AraTextBox, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.AraTextBox.1.0.0.2\lib\net40\Ara2.AraTextBox.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ara2.AraTimer, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
