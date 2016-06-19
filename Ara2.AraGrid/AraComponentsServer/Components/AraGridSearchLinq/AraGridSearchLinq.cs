@@ -51,8 +51,28 @@ namespace Ara2.Grid
             Click, DoubleClick
         }
 
+        public static EClick_ReturnSelect? ClickReturnSelectStandardForAll = null;
+
+        private EClick_ReturnSelect? _ClickReturnSelect = null;
+
         [AraDevProperty(EClick_ReturnSelect.Click)]
-        public EClick_ReturnSelect ClickReturnSelect = EClick_ReturnSelect.Click;
+        public EClick_ReturnSelect ClickReturnSelect
+        {
+            get
+            {
+                if (_ClickReturnSelect != null)
+                    return (EClick_ReturnSelect)_ClickReturnSelect;
+                else if (ClickReturnSelectStandardForAll != null)
+                    return (EClick_ReturnSelect)ClickReturnSelectStandardForAll;
+                else
+                    return EClick_ReturnSelect.Click;
+            }
+            set
+            {
+                _ClickReturnSelect = value;
+            }
+        } 
+            //= EClick_ReturnSelect.Click;
 
         public AraGridSearchLinq(IAraObjectClienteServer Container, Func<IQueryable<object>> vGetQuery) :
             this(Container, vGetQuery, null)
