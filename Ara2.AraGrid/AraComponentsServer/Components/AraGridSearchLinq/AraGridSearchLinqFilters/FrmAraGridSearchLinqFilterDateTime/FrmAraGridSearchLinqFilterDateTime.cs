@@ -102,7 +102,7 @@ namespace Ara2.Grid.Filters.Forms
                     case AraGridSearchLinq.enum_TipoColuna.Data:
                     case AraGridSearchLinq.enum_TipoColuna.DataHora:
                         {
-                            return from tmp in _SearchLinq
+                            var vQuery = from tmp in _SearchLinq
                                     .SqlTratado()
                                     .Where(_Coluna.Name + " != null")
                                     .Select(_Coluna.Name)
@@ -113,11 +113,15 @@ namespace Ara2.Grid.Filters.Forms
                                        NOME = g.Key.ToString(vFormatacaoParaString),
                                        Data = g.Key
                                    };
+
+                            var queryDelegate = Expression.Lambda<Func<IQueryable<QueryCePesquisaDateTime>>>(new OrderByRemover().Visit(vQuery.Expression)).Compile();
+
+                            return queryDelegate().OrderBy(a=>a.Data);
                         }
                         break;
                     case AraGridSearchLinq.enum_TipoColuna.Hora:
                         {
-                            return from tmp in _SearchLinq
+                            var vQuery = from tmp in _SearchLinq
                                     .SqlTratado()
                                     .Where(_Coluna.Name + " != null")
                                     .Select(_Coluna.Name)
@@ -128,6 +132,10 @@ namespace Ara2.Grid.Filters.Forms
                                        NOME = g.Key.ToString() //,).ToString(vFormatacaoParaString),
                                        //Hora = g.Key
                                    };
+
+                            var queryDelegate = Expression.Lambda<Func<IQueryable<QueryCePesquisaDateTime>>>(new OrderByRemover().Visit(vQuery.Expression)).Compile();
+
+                            return queryDelegate().OrderBy(a => a.NOME);
                         }
                         break;
                     default:
@@ -138,6 +146,8 @@ namespace Ara2.Grid.Filters.Forms
             else
                 return null;
         }
+
+        
 
         public override IQueryable<object> GridFiltroSimples_GetQuery()
         {

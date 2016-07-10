@@ -129,6 +129,7 @@
     <Compile Include="AraComponentsServer\Components\AraGrid\AraGridTree.cs" />
     <Compile Include="AraComponentsServer\Components\AraGrid\AraGridTreeGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToolsLinq.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ara2\Components\AraButton\AraButton.js" />

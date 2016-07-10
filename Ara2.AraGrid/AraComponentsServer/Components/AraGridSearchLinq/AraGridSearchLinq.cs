@@ -976,7 +976,7 @@ namespace Ara2.Grid
                                         }
                                     }
                                     else
-                                        AraTools.Alert("Filtro Invalido!");
+                                        SqlFiltroDataHora(ref vReturnQuery, vText.Substring(1, vText.Length - 1), ColName);
                                 }
                                 else
                                     SqlFiltroDataHora(ref vReturnQuery, vText, ColName);                               
