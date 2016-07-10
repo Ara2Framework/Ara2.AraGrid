@@ -245,7 +245,7 @@ namespace Ara2.Grid.Filters.Forms
                 vTmp.Append(lFiltro.Buttons.Add<Action>("Remover todos os filtros", AraLabelButton.ButtonIco.trash, TirarTodosFiltros));
             }
             else
-                vTmp.Append("<b>Selecione e adicione um ou mais eleentos no filtro</b>");
+                vTmp.Append("<b>Selecione e adicione um ou mais elementos no filtro</b>");
 
             lFiltro.Text = vTmp.ToString(); ;
         }

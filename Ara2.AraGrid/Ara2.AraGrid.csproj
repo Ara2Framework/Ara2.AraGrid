@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ara2, Version=1.2.6.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ara2.1.2.6.2\lib\net40\Ara2.dll</HintPath>
+    <Reference Include="Ara2, Version=1.3.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ara2.1.3.0.2\lib\net40\Ara2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ara2.AraButton, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
@@ -131,6 +131,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Ara2\Components\AraButton\AraButton.js" />
+    <Content Include="Ara2\Components\AraDiv\AraDiv.js" />
     <Content Include="Ara2\Components\AraGrid\AraGrid.js" />
     <Content Include="Ara2\Components\AraGrid\CREDITS.md" />
     <Content Include="Ara2\Components\AraGrid\files\grid_locale-pt-br.js" />
@@ -139,10 +141,110 @@
     <Content Include="Ara2\Components\AraGrid\files\ui_jqgrid.css" />
     <Content Include="Ara2\Components\AraGrid\files\ui_jqgrid_Ara2.css" />
     <Content Include="Ara2\Components\AraGrid\LICENSE.md" />
+    <Content Include="Ara2\Components\AraLabel\AraLabel.js" />
+    <Content Include="Ara2\Components\AraMenu\AraMenu.js" />
+    <Content Include="Ara2\Components\AraMenu\files\fg_menu.css" />
+    <Content Include="Ara2\Components\AraMenu\files\fg_menu.js" />
+    <Content Include="Ara2\Components\AraMenu\files\fg_menu_add.css" />
+    <Content Include="Ara2\Components\AraSelect\AraSelect.js" />
+    <Content Include="Ara2\Components\AraSplitContainers\AraSplitContainers.js" />
+    <Content Include="Ara2\Components\AraTable\AraTable.js" />
+    <Content Include="Ara2\Components\AraTable\td\AraTableTd.js" />
+    <Content Include="Ara2\Components\AraTable\tr\AraTableTr.js" />
+    <Content Include="Ara2\Components\AraTabs\AraTabs.js" />
+    <Content Include="Ara2\Components\AraTextBox\AraTextBox.js" />
+    <Content Include="Ara2\Components\AraTimer\AraTimer.js" />
+    <Content Include="Ara2\Components\AraWindowTaskBar\AraWindowTaskbar.js" />
+    <Content Include="Ara2\Components\AraWindow\AraWindow.js" />
+    <Content Include="Ara2\Components\AraWindow\AraWindows.js" />
+    <Content Include="Ara2\Components\WindowMain\WindowMain.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAra.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraAnchor.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraClass.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraComponent.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraGenVarSend.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraHttps.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraTick.js" />
+    <Content Include="Ara2\Files\AraKernel\ClassAraTools.js" />
+    <Content Include="Ara2\Files\AraKernel\other\ie7\ie7-squish.js" />
+    <Content Include="Ara2\Files\AraKernel\other\ie7\IE7.js" />
+    <Content Include="Ara2\Files\AraKernel\other\ie7\IE8.js" />
+    <Content Include="Ara2\Files\AraKernel\other\ie7\IE9.js" />
+    <Content Include="Ara2\Files\AraKernel\other\jquery_printElement.js" />
+    <Content Include="Ara2\Files\AraKernel\other\jquery_selectboxes.js" />
+    <Content Include="Ara2\Files\AraKernel\other\json2.js" />
+    <Content Include="Ara2\Files\AraScrollBar\AraScrollBar.js" />
+    <Content Include="Ara2\Files\BrowserNotSupported\BrowserNotSupported.html" />
+    <Content Include="Ara2\Files\Carregando.gif" />
+    <Content Include="Ara2\Files\JQueryScoolBar\jquery_nicescroll.js" />
+    <Content Include="Ara2\Files\jQuery\css\AraJQuery.css" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_flat_15_cd0a0a_40x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_glass_100_e4f1fb_1x400.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_glass_50_3baae3_1x400.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_glass_80_d7ebf9_1x400.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_highlight-hard_70_000000_1x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_highlight-soft_100_deedf7_1x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-bg_highlight-soft_25_ffef8f_1x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-icons_2694e8_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-icons_3d80b3_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-icons_72a7cf_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\cupertino_1_11\jquery-ui_min.css" />
+    <Content Include="Ara2\Files\jQuery\css\images\ui-anim_basic_16x16.gif" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Ara2\Files\jQuery\css\ui_lightness\jquery-ui-1_9_2_custom.css" />
+    <Content Include="Ara2\Files\jQuery\jquery-1_11_1_min.js" />
+    <Content Include="Ara2\Files\jQuery\jquery-cookie.js" />
+    <Content Include="Ara2\Files\jQuery\jquery-migrate-1_2_1_min.js" />
+    <Content Include="Ara2\Files\jQuery\jquery-ui-1_11_2_custom_min.js" />
+    <Content Include="Ara2\Files\jQuery\jquery_ui_touch-punch.js" />
+    <Content Include="Ara2\Files\Kiosk\AraKiosk.html" />
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridColsHidden\AraGridColsHidden.htm" />
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmResultSum\AraGridTreeGroupFrmResultSum.htm" />
     <Content Include="AraComponentsServer\Components\AraGridControlPanel\AraGridTreeGroupFrmSelection\AraGridTreeGroupFrmSelection.htm" />
     <Content Include="Nuget\NuGet.exe" />
+    <None Include="Ara2\Components\AraButton\CREDITS.md" />
+    <None Include="Ara2\Components\AraButton\LICENSE.md" />
+    <None Include="Ara2\Components\AraDiv\CREDITS.md" />
+    <None Include="Ara2\Components\AraDiv\LICENSE.md" />
+    <None Include="Ara2\Components\AraLabel\CREDITS.md" />
+    <None Include="Ara2\Components\AraLabel\LICENSE.md" />
+    <None Include="Ara2\Components\AraMenu\CREDITS.md" />
+    <None Include="Ara2\Components\AraMenu\LICENSE.md" />
+    <None Include="Ara2\Components\AraSelect\CREDITS.md" />
+    <None Include="Ara2\Components\AraSelect\LICENSE.md" />
+    <None Include="Ara2\Components\AraSplitContainers\CREDITS.md" />
+    <None Include="Ara2\Components\AraSplitContainers\LICENSE.md" />
+    <None Include="Ara2\Components\AraTable\CREDITS.md" />
+    <None Include="Ara2\Components\AraTable\LICENSE.md" />
+    <None Include="Ara2\Components\AraTabs\CREDITS.md" />
+    <None Include="Ara2\Components\AraTabs\LICENSE.md" />
+    <None Include="Ara2\Components\AraTextBox\CREDITS.md" />
+    <None Include="Ara2\Components\AraTextBox\LICENSE.md" />
+    <None Include="Ara2\Components\AraTimer\CREDITS.md" />
+    <None Include="Ara2\Components\AraTimer\LICENSE.md" />
+    <None Include="Ara2\Components\AraWindowTaskBar\CREDITS.md" />
+    <None Include="Ara2\Components\AraWindowTaskBar\LICENSE.md" />
+    <None Include="Ara2\Components\AraWindow\CREDITS.md" />
+    <None Include="Ara2\Components\AraWindow\LICENSE.md" />
+    <None Include="Ara2\CREDITS.md" />
+    <None Include="Ara2\LICENSE.md" />
     <None Include="AraComponentsServer\Components\AraForeignKeyLinq\AraForeignKeyLinq.AraDesign" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterDateTime\FrmAraGridSearchLinqFilterDateTime.AraDesign.json" />
     <None Include="AraComponentsServer\Components\AraGridSearchLinq\AraGridSearchLinqFilters\FrmAraGridSearchLinqFilterNumero\FrmAraGridSearchLinqFilterNumero.AraDesign.json" />

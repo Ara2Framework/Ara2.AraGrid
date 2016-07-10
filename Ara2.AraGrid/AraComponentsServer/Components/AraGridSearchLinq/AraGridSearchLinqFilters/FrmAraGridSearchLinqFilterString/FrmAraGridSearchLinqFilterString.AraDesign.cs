@@ -185,7 +185,7 @@ namespace AraDesign
             this.TabMultiplos = new Ara2.Components.AraTab(this.TabsTiposFiltro);
 
             this.TabMultiplos.Name = "TabMultiplos";
-            this.TabMultiplos.Caption  = @"Filtro Multimplos";
+            this.TabMultiplos.Caption  = @"Filtro Múltiplo";
             this.TabMultiplos.Pos  = 1;
             this.TabMultiplos.Anchor.Left  = 1;
             this.TabMultiplos.Anchor.Top  = 41;
