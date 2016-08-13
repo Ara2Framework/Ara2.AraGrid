@@ -613,10 +613,18 @@ namespace Ara2.Components
                 {
                     //string Nome = (vObj.GetType().GetProperty(ColunaNome) != null ? vObj.GetType().GetProperty(ColunaNome).GetValue(vObj, null) : vObj.GetType().GetField(ColunaNome).GetValue(vObj)).ToString();
                     //Itens.Add(Nome);
+                    if (vObj != null)
+                    {
+                        object vTmpCodigoValueObj = (vObj.GetType().GetProperty(vTmpColuna) != null ? vObj.GetType().GetProperty(vTmpColuna).GetValue(vObj, null) : vObj.GetType().GetField(vTmpColuna).GetValue(vObj));
+                        object vTmpNomeValueObj = (vObj.GetType().GetProperty(ColunaNome) != null ? vObj.GetType().GetProperty(ColunaNome).GetValue(vObj, null) : vObj.GetType().GetField(ColunaNome).GetValue(vObj));
 
-                    string vTmpCodigoValue = (vObj.GetType().GetProperty(vTmpColuna) != null ? vObj.GetType().GetProperty(vTmpColuna).GetValue(vObj, null) : vObj.GetType().GetField(vTmpColuna).GetValue(vObj)).ToString();
-                    string vTmpNomeValue = (vObj.GetType().GetProperty(ColunaNome) != null ? vObj.GetType().GetProperty(ColunaNome).GetValue(vObj, null) : vObj.GetType().GetField(ColunaNome).GetValue(vObj)).ToString();
-                    Itens.Add(vTmpCodigoValue + " - " + vTmpNomeValue, vTmpNomeValue);
+
+                        string vTmpCodigoValue = (vTmpCodigoValueObj==null?string.Empty: vTmpCodigoValueObj.ToString());
+                        string vTmpNomeValue = (vTmpNomeValueObj == null ? string.Empty : vTmpCodigoValueObj.ToString());
+
+                        if (!string.IsNullOrWhiteSpace(vTmpCodigoValue) && !string.IsNullOrWhiteSpace(vTmpNomeValue))
+                            Itens.Add(vTmpCodigoValue + " - " + vTmpNomeValue, vTmpNomeValue);
+                    }
                 }
 
                 return Itens;
