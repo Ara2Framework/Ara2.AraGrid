@@ -620,7 +620,7 @@ namespace Ara2.Components
 
 
                         string vTmpCodigoValue = (vTmpCodigoValueObj==null?string.Empty: vTmpCodigoValueObj.ToString());
-                        string vTmpNomeValue = (vTmpNomeValueObj == null ? string.Empty : vTmpCodigoValueObj.ToString());
+                        string vTmpNomeValue = (vTmpNomeValueObj == null ? string.Empty : vTmpNomeValueObj.ToString());
 
                         if (!string.IsNullOrWhiteSpace(vTmpCodigoValue) && !string.IsNullOrWhiteSpace(vTmpNomeValue))
                             Itens.Add(vTmpCodigoValue + " - " + vTmpNomeValue, vTmpNomeValue);
