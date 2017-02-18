@@ -49,13 +49,13 @@ namespace Ara2.Grid.Filters.Forms
             
             if (_SearchLinq != null && _Coluna != null)
             {
-                return from tmp in _SearchLinq
+                return (from tmp in _SearchLinq
                                     .SqlTratado()
                                     .Where(_Coluna.Name + " != null")
                                     .Select(_Coluna.Name)
                                     .Cast<decimal>()
                        group tmp by tmp into g
-                       select new QueryCePesquisa { NOME = g.Key };
+                       select new QueryCePesquisa { NOME = g.Key }).OrderBy(a=>a.NOME);
             }
             else
                 return null;
